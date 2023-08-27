@@ -1,0 +1,55 @@
+# .gitignore file
+
+# Ignore Python build artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore VSCode settings
+.vscode/
+
+# Ignore files related to virtual environments
+venv/
+*.venv
+venv.bak/
+
+# Ignore Django stuff
+*.log
+*.pot
+*.pyc
+*.db
+db.sqlite3
+media
+
+# Ignore Flask stuff
+instance/
+.webassets-cache
+
+# Ignore databases
+*.sqlite3
+*.sqlite
+
+# Ignore if you're deploying using Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+*.dockerfile
+*.dockerignore
+
+# Ignore dotenv environment variables file
+.env
+
+# Ignore Mac system files
+.DS_Store
+
+# Ignore Linux system files
+*~
+
+# Ignore Windows system files
+Thumbs.db
+Desktop.ini
