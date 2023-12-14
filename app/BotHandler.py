@@ -1,45 +1,46 @@
-import asyncio
-import logging
-import sys
-from os import getenv
-
 from aiogram import Bot, Dispatcher, types
-from aiogram.types import ParseMode
-from aiogram.dispatcher.filters import CommandStart
-from aiogram.types import Message
-from aiogram.utils.markdown import hbold
-from app.Users import Users
+from aiogram.utils.keyboard import ReplyKeyboardBuilder
 from dotenv import load_dotenv
-from aiogram import types
+from os import getenv
 
 load_dotenv()
 TOKEN = getenv('TOKEN')
-bot = Bot(TOKEN, parse_mode=ParseMode.HTML)
-dp = Dispatcher(bot)
+bot = Bot(TOKEN)
+dp = Dispatcher()
 
-@dp.message_handler(content_types=types.ContentTypes.TEXT)
+@dp.message(commands=['start'])
 async def start_handler(message: types.Message):
-    if message.text.lower() == "start":
-        await message.answer(f"Hello, {hbold(message.from_user.first_name)}!")
-        await message.answer(f"Welcome to Eatsir 😄")    
-        await message.answer(f"You know what to do... Go ahead!")  
+    await message.answer(f"Hello, {message.from_user.first_name}!")
+    await message.answer("Welcome to Eatsir 😄")
+    await message.answer("You know what to do... Go ahead!")
 
-     
-@dp.message_handler(content_types=types.ContentTypes.TEXT)
+    # Reply keyboard setup using ReplyKeyboardBuilder
+    keyboard = ReplyKeyboardBuilder()
+    keyboard.button("New here")
+    keyboard.button("Login")
+    keyboard.adjust(2)  # Adjust buttons into two columns
+
+    # Send message with reply keyboard
+    await message.answer("Choose an option:", reply_markup=keyboard.as_markup())
+
+@dp.message(lambda message: message.text in ["New here", "Login"])
 async def login_handler(message: types.Message):
-        print('hello')
-        password =  message.text
-        username = message.from_user.first_name
-    
-        await message.answer(f"Hold on...")
-        user = Users.get_user(username, password)
-        if user is not None:
-            # Display user info
-            await message.answer("Welcome back!")
-        else:
-            # Ask if they want to get started
-            await message.answer("Looks like you don't know what to do!")
-            await message.answer("Input your passocode or create one 👇", reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("Create"))
+    if message.text == "New here":
+        # Handle new user scenario
+        await message.answer("Welcome new user! Please register...")
+        # Add your registration logic here
+    elif message.text == "Login":
+        # Handle login scenario
+        await message.answer("Please enter your password:")
+        # Add your login logic here
 
+# Main function to start the bot
 async def main() -> None:
+    # Assign bot to the dispatcher
+    dp.bot = bot
     await dp.start_polling()
+
+# Entry point of the script
+if __name__ == '__main__':
+    import asyncio
+    asyncio.run(main())

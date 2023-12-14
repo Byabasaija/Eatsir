@@ -14,7 +14,7 @@ __pycache__/
 .vscode/
 
 # Ignore files related to virtual environments
-venv/
+env/
 *.venv
 venv.bak/
 
